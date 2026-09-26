@@ -29,6 +29,7 @@ graph TD
     D --> E[Spatial Normalization relative to Wrist]
     E --> F[Random Forest Classifier Inference]
     F --> G[Real-time Text Output]
+````
 Pose Estimation (RTMLib): Kadr yuzasidan inson tanasi va qo'l skeletlari onnxruntime backend orqali o'qiladi. Chap va o'ng qo'l tensorlari ajratilib, ishonchlilik ko'rsatkichi (confidence score > 0.2) eng yuqori bo'lgan qo'l tanlab olinadi.
 
 Feature Engineering & Normalization: Model kadrning qayerida turishingizga qaram (overfit) bo'lib qolmasligi uchun, barcha 21 ta barmoq nuqtasi bilak (wrist) koordinatasiga nisbatan ayirilib, nolinchi o'qqa (0,0) normallashtirildi. Bu data distribution shift muammosini to'liq hal qildi.
