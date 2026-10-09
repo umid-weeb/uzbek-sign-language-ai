@@ -1,110 +1,293 @@
-# Uzbek Sign Language (USL) Real-Time Recognition System
+## 🧠 System Architecture
 
-![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)
-![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?logo=opencv&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.9-orange?logo=scikit-learn&logoColor=white)
-![RTMPose](https://img.shields.io/badge/Pose_Estimation-RTMLib-red)
-![Machine Learning](https://img.shields.io/badge/AI-Classification-blueviolet)
+## Project structure
 
-O'zbek imo-ishora tili (USL) daktil alifbosini real vaqt rejimida (real-time inference) aniqlovchi va tasniflovchi sun'iy intellekt tizimi. Loyiha kompyuter ko'rishi (Computer Vision) va mashinali o'rganish (Machine Learning) algoritmlarini integratsiya qilgan holda, imo-ishoralarni matnga o'girish jarayonini to'liq avtomatlashtiradi.
+The repository is organized by responsibility so an entrypoint can be found
+without searching the whole tree:
 
-## 📌 1. Muammo va Yechim (Problem Statement & Solution)
+```text
+pose/                  camera runtime, landmark collection and pose utilities
+features/              feature extraction and temporal feature definitions
+training/              dataset preparation, training and evaluation commands
+inference/             reusable inference adapters and prediction helpers
+data/
+  dataset.csv          canonical labeled Uzbek alphabet dataset
+  processed/           reproducible splits, metrics and plots
+  external/            downloaded third-party datasets and source notes
+  dynamic/             locally recorded temporal sequences
+models/
+  gesture_extra_trees_full.pkl  active production alphabet model
+  gesture_extra_trees.pkl       active held-out-evaluation fallback
+  pose/                          RTMLib pose checkpoint
+archive/
+  legacy-models/       models no longer selected by the camera runtime
+  legacy-data/         superseded datasets kept for traceability
+api/                   optional API entrypoint
+```
 
-**Muammo:** O'zbekistonda eshitish va gapirish qobiliyati cheklangan insonlar uchun raqamli ochiq ma'lumotlar bazasi (open-source dataset) deyarli mavjud emas. Hozirda qo'llanilayotgan imo-ishora tillarida kirill va lotin yozuviga asoslangan daktil alifbolari o'rtasida o'tish jarayoni ketmoqda. Mavjud global modellar (masalan, ASL - American Sign Language) O'zbek daktil alifbosi morfologiyasi va barmoq joylashuv spetsifikatsiyalariga umuman mos kelmaydi.
+Primary commands:
 
-**Yechim:** Yangi lotin yozuviga asoslangan (A-Z, O', G', Sh, Ch, Ng) 29 ta harfdan iborat daktil alifbosini to'liq taniy oladigan end-to-end Machine Learning pipeline ishlab chiqildi. Tizim yopiq muhitda (synthetic data) emas, balki jonli kadrlar asosida fine-tuning qilingan classifier yordamida yuqori aniqlikda (accuracy > 94%) ishlaydi. 
+```bash
+# Live alphabet recognition
+/usr/local/bin/python3.13 pose/webcam_predict.py --camera 0
 
-Bu shunchaki bazaviy deteksiya emas, balki har bir qo'l bo'g'imi (21 ta keypoint) orasidagi fazoviy bog'liqlikni (spatial relationship) hisoblaydigan va shovqinlardan (noise) tozalangan murakkab tasniflash tizimidir.
+# Production model training from the canonical dataset
+/usr/local/bin/python3.13 training/train_production_full.py
 
-## ⚙️ 2. Arxitektura va DL Pipeline
+# Held-out evaluation
+/usr/local/bin/python3.13 training/train_extra_trees.py
+```
 
-Loyihaning arxitekturasi asosan ikki bosqichli model zanjiriga asoslangan: **Feature Extraction (Belgilarni ajratib olish)** va **Classification (Tasniflash)**.
+The camera selects `models/gesture_extra_trees_camera.pkl` only when a
+calibration model exists; otherwise it selects the full production model and
+then the held-out fallback. Historical models are not loaded automatically.
+
+The **Uzbek Sign Language AI** project aims to recognize hand gestures, convert them into Uzbek text, and optionally generate speech.
+
+### 🔄 End-to-End Workflow
 
 ```mermaid
-graph TD
-    A[Webcam Video Stream] --> B[RTMPose / Wholebody Model]
-    B --> C{Keypoints Confidence > 0.2?}
-    C -->|Yes| D[Hand Keypoint Extraction 21 pts]
-    C -->|No| A
-    D --> E[Spatial Normalization relative to Wrist]
-    E --> F[Random Forest Classifier Inference]
-    F --> G[Real-time Text Output]
-````
-Pose Estimation (RTMLib): Kadr yuzasidan inson tanasi va qo'l skeletlari onnxruntime backend orqali o'qiladi. Chap va o'ng qo'l tensorlari ajratilib, ishonchlilik ko'rsatkichi (confidence score > 0.2) eng yuqori bo'lgan qo'l tanlab olinadi.
+flowchart TD
+    A["📷 Camera / Video Input"] --> B["✋ Hand Pose Estimation<br/>RTMLib"]
+    B --> C["📍 Keypoint Extraction<br/>21 hand landmarks"]
+    C --> D["⚙️ Preprocessing<br/>Normalization & Feature Preparation"]
 
-Feature Engineering & Normalization: Model kadrning qayerida turishingizga qaram (overfit) bo'lib qolmasligi uchun, barcha 21 ta barmoq nuqtasi bilak (wrist) koordinatasiga nisbatan ayirilib, nolinchi o'qqa (0,0) normallashtirildi. Bu data distribution shift muammosini to'liq hal qildi.
+    D --> E{"Recognition Mode"}
 
-Classification: Ekstraksiya qilingan 42 ta o'lchamli (X va Y koordinatalar) feature space Scikit-Learn'ning RandomForestClassifier (n_estimators=100) modeliga uzatiladi.
+    E --> F["🧠 MLP<br/>Static Gesture Classification"]
+    E --> G["🧠 LSTM / GRU<br/>Temporal Sequence Recognition"]
 
-📊 3. Dataset Generatsiyasi va Data Pipeline
-Loyiha uchun tayyor dataset yo'qligi sababli, ma'lumotlar bazasi noldan, ikki bosqichda yaratildi:
+    F --> H["📊 Prediction + Confidence"]
+    G --> H
 
-Stage 1 (Baseline Testing): Arxitektura va pipeline'ning uzluksiz ishlashini tekshirish uchun tasodifiy qiymatlardan (random float coordinates) iborat dummy dataset generatsiya qilindi va tizim integratsiyasi testdan o'tkazildi.
+    H --> I{"✅ Reliable Prediction?"}
 
-Stage 2 (Real Data Collection & Labeling): Modelni real muhitga moslashtirish uchun maxsus interaktiv skript (live_collector.py) yozildi. Kameraga qarab, har bir harf uchun jonli ravishda 21 ta barmoq bo'g'imining aniq koordinatalari yig'ildi. Natijada 6547 ta toza (labeled) kadr saqlab olindi. Oyna effekti (mirroring) sababli kelib chiqadigan xatoliklar kadrni cv2.flip qilish orqali bartaraf etildi va faqat aniq bitta o'q qoidalari datasetga yozildi.
+    I -->|Yes| J["🔤 Gesture / Letter Output"]
+    I -->|No| K["⏳ Wait for More Frames<br/>or Reject Prediction"]
 
-📂 4. Loyiha Tuzilmasi (Repository Structure)
-Plaintext
-uzbek-sign-language-ai/
-├── data/
-│   ├── dataset.csv                 # 6547 qatorli tozalangan hand-keypoints bazasi
-│   ├── sign_language_model.pkl     # O'qitilgan (Trained) Random Forest model
-│   └── videos/                     # (Optional) Xom video ma'lumotlar
-├── pose/
-│   ├── dataset_builder.py          # Videolardan avtomatlashtirilgan data ajratuvchi
-│   ├── live_collector.py           # Real-time interaktiv dataset yig'ish skripti (Custom Labeler)
-│   ├── train_model.py              # ML modelni o'qitish va validatsiya qilish (Classifier Trainer)
-│   └── webcam_predict.py           # Real-time Inference skripti (Live Detection)
-├── requirements.txt                # Kerakli kutubxonalar ro'yxati
-└── README.md                       # Loyiha hujjatlari
-💻 5. Texnik Talablar (Hardware & Software Requirements)
-Tizim inference jarayonida kechikishlar (latency) bo'lmasligi uchun optimizatsiya qilingan:
+    K --> B
 
-OS: Windows 10/11, macOS, yoki Linux.
+    J --> L["📝 Uzbek Text Processing"]
+    L --> M["🔊 VoiceLab / Text-to-Speech"]
+    M --> N["🗣️ Spoken Output"]
 
-RAM: Minimum 4GB (Model training va dataset RAM'da o'qilishi uchun).
+    classDef input fill:#dbeafe,stroke:#2563eb,color:#111827
+    classDef ai fill:#ede9fe,stroke:#7c3aed,color:#111827
+    classDef decision fill:#fef3c7,stroke:#d97706,color:#111827
+    classDef output fill:#dcfce7,stroke:#16a34a,color:#111827
+    classDef pending fill:#f3f4f6,stroke:#6b7280,color:#111827
 
-CPU: Zamonaviy 4 yadroli protsessor (ONNX runtime backend CPU'da yaxshi ishlaydi).
+    class A,B,C,D input
+    class F,G,H ai
+    class E,I decision
+    class J,L,M,N output
+    class K pending
+```
 
-GPU (Optional): Agar mavjud bo'lsa, RTMPose modelini CUDA/MPS orqali tezlashtirish mumkin, lekin CPU inference ham real-time (30+ FPS) ishlashga qodir.
+### 🧩 Component Responsibilities
 
-Kamera: Minimum 720p HD veb-kamera (Yorug'likni yaxshi qabul qiluvchi linza tavsiya etiladi).
+| Component | Responsibility |
+|---|---|
+| Camera / Video | Captures hand movements |
+| RTMLib | Detects hand landmarks |
+| Preprocessing | Prepares and normalizes coordinates |
+| MLP | Classifies a static hand pose |
+| LSTM / GRU | Learns patterns across video frames |
+| Confidence Filter | Rejects uncertain or unstable predictions |
+| Uzbek Text Processing | Combines recognized outputs into text |
+| VoiceLab | Converts supported text into speech |
 
-🚀 6. Tezkor Ishga Tushirish (Quick Start)
-1. Repozitoriyni yuklab olish:
+### 🏋️ Model Training Strategy
 
-Bash
-git clone [https://github.com/yourusername/uzbek-sign-language-ai.git](https://github.com/yourusername/uzbek-sign-language-ai.git)
-cd uzbek-sign-language-ai
-2. Virtual muhit va kutubxonalarni o'rnatish:
+1. Prepare and validate labeled keypoint data.
+2. Establish a baseline using the existing Random Forest model.
+3. Train and evaluate an MLP model on the same data split.
+4. Collect labeled video sequences for dynamic gesture recognition.
+5. Experiment with LSTM or GRU when sequence data is available.
+6. Evaluate on unseen recordings and real camera input.
+7. Add confidence filtering and error analysis before enabling speech output.
 
-Bash
-python3 -m venv .venv
-source .venv/bin/activate  # Windows uchun: .venv\Scripts\activate
-pip install -r requirements.txt
-3. Modelni o'qitish (Model Training):
-(Diqqat: Loyihada tayyor sign_language_model.pkl bo'lishiga qaramay, muhit o'zgarishlariga moslashish uchun uni locally qayta train qilish tavsiya etiladi)
+### ⚠️ Current Development Status
 
-Bash
-python pose/train_model.py
-Kutilayotgan natija: Accuracy metric 94% dan yuqori bo'lishi kerak.
+- **Implemented:** A Random Forest baseline with 93.29% test accuracy on the existing keypoint dataset.
+- **Dataset:** 6,547 samples across 29 classes, each represented by 21 hand landmarks.
+- **Planned:** Deep Learning experiments, real-time camera integration, temporal gesture recognition, confidence filtering, and speech output.
 
-4. Real-time Inference (Jonli efirda test qilish):
+The old static classifier files were removed after the external camera test
+failed. The downloaded Uzbek dynamic checkpoint is kept separately under
+`data/external/uzslr-isolated-dynamic/best_model.pth`. It uses 32-frame
+MediaPipe Holistic input and cannot be substituted into the old RTMLib static
+camera script without an adapter.
 
-Bash
-python pose/webcam_predict.py
-⚠️ 7. Muammolarni Boshqarish (Troubleshooting)
-Agar model ishlamasa yoki noto'g'ri (hallucination) tasnif qilsa:
+The alphabet camera path now uses an adaptive confidence-aware landmark
+smoother, short missing-frame hold, runtime feature-layout validation, and an
+on-screen FPS indicator. A letter is shown only when the top probability is at
+least 55%, it beats the second choice by at least 12 percentage points, and
+the same candidate remains stable for four processed frames. Otherwise the
+screen shows `Noaniq` instead of turning an uncertain guess into a letter. It
+remains alphabet-only; word and sentence decoding are intentionally not
+enabled in this stage.
 
-Aniqlik keskin pasayishi (Model Misclassification): Bu odatda yorug'lik keskin o'zgarganda yoki kadrda ikkita qo'l aralashib ketganda yuzaga keladi (Data Distribution Shift). Yechim: Orqa fonni tozalang, xona yorug'ligini oshiring.
+If the live model does not recognize your hand, collect camera-native
+calibration samples:
 
-Harflarni umuman tanimasligi: Agar tizim butunlay tasodifiy (random) qiymat qaytarayotgan bo'lsa, model to'g'ri o'qitilmagan. Terminalda yana bir bor train_model.py ni ishga tushiring va dataset.csv bo'sh emasligiga ishonch hosil qiling.
+```bash
+/usr/local/bin/python3.13 pose/camera_calibration.py --samples-per-label 100
+```
 
-Kamera ishga tushmasligi: webcam_predict.py dagi cv2.VideoCapture(0) indeksini 1 yoki 2 ga o'zgartirib ko'ring (ayniqsa tashqi kamera ishlatayotgan bo'lsangiz).
+Press `S` to collect the current letter, `N` to move to the next letter, and
+`Q` to stop. Then train the camera-calibrated model:
 
-🔮 8. Kelajakdagi Rejalar (Roadmap)
-Time-series model (LSTM yoki Transformer) integratsiyasi orqali statik harflarni emas, balki dinamik (harakatdagi) so'zlarni ham classification qilish.
+```bash
+/usr/local/bin/python3.13 training/train_camera_calibrated.py
+```
 
-Yig'ilgan dataset hajmini oshirish va Clustering algoritmlari orqali ma'lumotlar bazasidagi outlier (anomal) kadrlarni tozalash.
+The calibration model is saved as `models/gesture_extra_trees_camera.pkl` and
+is selected automatically by the camera script. Existing datasets remain
+intact.
 
-Modelni TensorFlow Lite formatiga eksport qilib, mobil ilova (Android/iOS) ga deploy qilish.
+Without manual camera collection, the current labeled Uzbek dataset can be
+used to build a production model:
+
+```bash
+/usr/local/bin/python3.13 training/train_production_full.py
+```
+
+This trains `models/gesture_extra_trees_full.pkl` on all 6,547 labeled rows.
+The 80/20 held-out evaluation remains documented in
+`data/processed/metrics_extra_trees.txt` (93.75%); the full-data production
+model itself must not be reported as a new independent test score.
+
+### iPhone camera
+
+On macOS, enable **Continuity Camera** on the iPhone and keep it near the Mac.
+Then list the camera devices:
+
+```bash
+/usr/local/bin/python3.13 pose/webcam_predict.py --list-cameras
+```
+
+If the iPhone appears as index `1`, run:
+
+```bash
+/usr/local/bin/python3.13 pose/webcam_predict.py --camera 1
+```
+
+For convenience, `0.5` is accepted as an explicit iPhone alias and directly
+uses the macOS Continuity Camera index `1` without probing other devices:
+
+```bash
+/usr/local/bin/python3.13 pose/webcam_predict.py --camera 0.5
+```
+
+Use the same `--camera 1` option while collecting calibration data:
+
+```bash
+/usr/local/bin/python3.13 pose/camera_calibration.py --camera 1 --samples-per-label 100
+```
+
+The index depends on macOS and connected devices; use the list command instead
+of assuming it is always `1`.
+
+The camera helper now tests that each index returns a real frame, not only that
+OpenCV reports it as open. It uses `CAP_ANY` because some macOS builds open
+Continuity Camera through that backend while AVFoundation alone returns an
+empty first frame. Keep the iPhone unlocked, near the Mac, and select the
+index printed by `--list-cameras`.
+
+### sign2text compatibility mode
+
+The public [`uzibytes/sign2text`](https://github.com/uzibytes/sign2text)
+artifacts are preserved under `data/external/sign2text/`. They use 21
+MediaPipe hand landmarks and bounding-box-minimum features, which is a
+different contract from the default Uzbek wrist-relative RTMLib model. A
+separate experimental mode applies that preprocessing to RTMLib coordinates:
+
+```bash
+/usr/local/bin/python3.13 pose/webcam_predict.py --camera 1 --model sign2text
+```
+
+This mode is a compatibility experiment, not an Uzbek accuracy claim. Its
+published classes are English A-Z plus words, and the source model has no
+verified Uzbek label mapping. The default command remains the Uzbek model.
+
+## Dynamic recognition development
+
+The existing `data/dataset.csv` is preserved as a static baseline. Dynamic
+recognition uses landmark sequences rather than a single frame:
+
+```bash
+/usr/local/bin/python3.13 pose/dynamic_recorder.py --label salom --signer signer_01 --view front
+```
+
+Press `Space` to start and stop one sequence, then `Q` to exit. Sequences are
+stored under `data/dynamic/` with labels and signer/view metadata.
+
+After collecting enough isolated-word sequences:
+
+```bash
+/usr/local/bin/python3.13 training/train_dynamic.py
+```
+
+The dynamic model is a temporal Transformer baseline. It is intentionally
+trained on Uzbek-labeled local data: public ASL datasets or checkpoints can
+help with pose/video pretraining, but their labels and sign semantics cannot
+be used as a drop-in Uzbek sign-language translator.
+
+After training, run the rolling-window camera demo:
+
+```bash
+/usr/local/bin/python3.13 pose/webcam_dynamic.py
+```
+
+## Public Uzbek dynamic checkpoint
+
+An additional pretrained Uzbek isolated-sign model from
+[`akkomron/uzslr-isolated-dynamic`](https://github.com/akkomron/uzslr-isolated-dynamic)
+is stored separately under `data/external/uzslr-isolated-dynamic/`. It predicts
+50 signs from 32-frame MediaPipe Holistic sequences and is not mixed with the
+existing static CSV or local dynamic model.
+
+Verify that its checkpoint loads:
+
+```bash
+/usr/local/bin/python3.13 - <<'PY'
+import torch
+from inference.uzslr_pretrained import load_pretrained_uzslr, predict_pretrained
+
+model, labels = load_pretrained_uzslr()
+label, confidence = predict_pretrained(model, torch.zeros(1, 32, 708), labels)
+print(label, confidence)
+PY
+```
+
+Its source-reported accuracy and input contract are documented in
+`data/external/uzslr-isolated-dynamic/SOURCE.md`. Those metrics are not an
+independent benchmark for this project. A live camera adapter must preserve
+the source preprocessing contract before production use.
+
+The temporary external Random Forest camera experiment was removed because
+its landmark contract did not match the RTMLib live stream. The public
+dataset and its train/test split remain available for a future model trained
+with the exact camera capture schema. The stable camera command remains:
+
+```bash
+/usr/local/bin/python3.13 pose/webcam_predict.py
+```
+
+For a raw MediaPipe Holistic sequence, use the project-owned exact adapter:
+
+```python
+from inference.uzslr_pretrained import (
+    load_pretrained_uzslr,
+    predict_raw_sequence,
+)
+
+model, labels = load_pretrained_uzslr()
+label, confidence = predict_raw_sequence(model, raw_frames, labels)
+```
+
+Here `raw_frames` is a `torch.Tensor` or NumPy array shaped `(32, 1662)`:
+face, pose, right hand, and left hand in the source order. The adapter returns
+the source label and confidence after producing the required `(32, 708)`
+features.

@@ -1,0 +1,76 @@
+{
+  "dataset_name": "BdSL-Sensor-Glove Demo",
+  "version": "1.0.0",
+  "created_date": "2026-03-26",
+  "license": "CC BY 4.0",
+  
+  "description": "Demo sensor dataset for Bangla Sign Language (BdSL) gesture recognition. This is a sample dataset for learning and prototyping sign language recognition systems. Contains simulated sensor readings from a smart glove concept.",
+  
+  "data_type": "DEMO - Sample data for educational purposes",
+  
+  "note": "This is demonstration data for developers learning sign language recognition. For real datasets, see DATASETS.md for links to actual collected datasets from researchers worldwide.",
+  
+  "hardware_concept": {
+    "microcontroller": "ESP8266 NodeMCU v3",
+    "flex_sensors": {
+      "model": "Spectra Symbol FS-L-0054-103-ST",
+      "quantity": 5,
+      "placement": ["thumb", "index", "middle", "ring", "pinky"],
+      "resolution_bits": 10
+    },
+    "imu": {
+      "model": "MPU6050",
+      "accelerometer_range": "±2g",
+      "gyroscope_range": "±250°/s",
+      "resolution_bits": 16
+    },
+    "sampling_rate_hz": 50
+  },
+  
+  "data_format": {
+    "file_format": "JSON",
+    "encoding": "UTF-8"
+  },
+  
+  "samples_included": {
+    "train": 3528,
+    "val": 648,
+    "test": 648,
+    "total": 4824
+  },
+  
+  "gestures": {
+    "vowels": ["A", "AA", "I", "II", "U", "UU", "RI", "E", "OI", "O", "OU"],
+    "consonants": ["KA", "KHA", "GA", "GHA", "NGA", "CA", "CHA", "JA", "JHA", "NYA", 
+                   "TA", "THA", "DA", "DHA", "NA", "TA_D", "THA_D", "DA_D", "DHA_D", "NA_D"],
+    "words": ["HELLO", "THANKYOU", "HELP", "WATER", "FOOD"],
+    "total": 36
+  },
+  
+  "gesture_names": {
+    "A": "অ", "AA": "আ", "I": "ই", "II": "ঈ", "U": "উ", "UU": "ঊ",
+    "RI": "ঋ", "E": "এ", "OI": "ঐ", "O": "ও", "OU": "ঔ",
+    "KA": "ক", "KHA": "খ", "GA": "গ", "GHA": "ঘ", "NGA": "ঙ",
+    "CA": "চ", "CHA": "ছ", "JA": "জ", "JHA": "ঝ", "NYA": "ঞ",
+    "TA": "ট", "THA": "ঠ", "DA": "ড", "DHA": "ঢ", "NA": "ণ",
+    "TA_D": "ত", "THA_D": "থ", "DA_D": "দ", "DHA_D": "ধ", "NA_D": "ন",
+    "HELLO": "নমস্কার", "THANKYOU": "ধন্যবাদ", "HELP": "সাহায্য",
+    "WATER": "জল", "FOOD": "খাবার"
+  },
+  
+  "real_datasets_for_reference": {
+    "note": "For actual collected BdSL datasets, see:",
+    "bdsl47": {
+      "url": "https://zenodo.org/record/7067906",
+      "samples": 47000,
+      "type": "image",
+      "citation": "Afzal et al. (2022)"
+    },
+    "ku-bdsl": {
+      "url": "https://data.mendeley.com/datasets/scpvm2nbkm/1",
+      "samples": 12500,
+      "type": "image",
+      "citation": "Islam et al. (2023)"
+    }
+  }
+}

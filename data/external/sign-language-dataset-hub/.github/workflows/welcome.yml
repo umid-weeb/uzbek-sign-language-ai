@@ -1,0 +1,22 @@
+name: Welcome New Contributors
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+  issues:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/first-interaction@v3
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: >
+            Welcome to SignLanguage Dataset Hub! Thanks for opening this issue.
+          pr_message: >
+            Welcome to SignLanguage Dataset Hub! Thanks for your first pull request!

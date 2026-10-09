@@ -1,0 +1,67 @@
+dataset_id,dataset_name,language,language_code,modality,samples,signers,license,source_url,citation_key,notes
+ASL-VID-001,MS-ASL,American Sign Language,ASL,Video,25121,222,Research Use,https://www.microsoft.com/en-us/research/project/ms-asl/,vaezijoze2019msasl,Large-scale real-life ASL with 1000 classes
+ASL-VID-002,WLASL,American Sign Language,ASL,Video,21083,100+,CC BY 4.0,https://github.com/dxli94/WLASL,li2020wlasl,2000 word-level ASL signs
+ASL-VID-003,How2Sign,American Sign Language,ASL,Video+Pose+Depth,80+ hours,1,CC BY-NC 4.0,https://how2sign.github.io/,duarte2021how2sign,Multimodal multiview continuous ASL
+ASL-VID-004,OpenASL,American Sign Language,ASL,Video,284+ hours,200+,CC BY-NC 4.0,https://github.com/chevalierNoir/OpenASL,shi2022openasl,Open-domain ASL translation
+ASL-VID-005,ASLLVD,American Sign Language,ASL,Video,~9800 tokens,1-6 per sign,Research Use,https://www.bu.edu/asllrp/av/dai-asllvd.html,athitsos2008asllvd,3300+ signs multi-angle
+ASL-VID-006,AUTSL,Turkish Sign Language,TID,Video+RGB-D+Skeleton,38336,43,CC BY 4.0,https://arxiv.org/abs/2008.00932,ciga2020autsl,226 signs multimodal
+ASL-IMG-001,ASL-MNIST,American Sign Language,ASL,Image,34627,N/A,CC BY-SA 4.0,https://www.kaggle.com/datasets/datamunge/sign-language-mnist,aslmnist2019,24 classes 28x28
+ASL-IMG-002,ASL Alphabet,American Sign Language,ASL,Image,87000,1,CC BY 4.0,https://www.kaggle.com/datasets/grassknoted/asl-alphabet,aslalphabet2018,29 classes 200x200
+ASL-VID-007,ChaLearn LAP,American Sign Language,ASL,Video+RGB-D,36302,Research Use,https://chalearnlap.cvc.uab.cat/,escalera2021chalearn,AUTSL subset benchmark
+ASL-DB-001,ASL-LEX,American Sign Language,ASL,Linguistic DB,2700+ signs,N/A,CC BY 4.0,https://asl-lex.org/,caselli2017asllex,Phonological and lexical database
+ASL-VID-008,ASL Citizen,American Sign Language,ASL,Video,Crowdsourced,50+,CC BY 4.0,https://aslcitizen.org/,demeulder2022aslcitizen,Diverse Deaf signers
+ARSL-IMG-001,ArSL2018,Arabic Sign Language,ArSL,Image,54049,40,CC BY 4.0,https://www.kaggle.com/datasets/ahmedkhan123/arabic-sign-language,arsl2018,32 Arabic letter classes
+ARSL-VID-001,KArSL-502,Arabic Sign Language,ArSL,Video,502 signs,Research Use,https://huggingface.co/datasets/karlsruhe-nerdstation/karSL-502,karsl502,Kuwaiti Arabic Sign Language
+AUSLAN-DB-001,Auslan Signbank,Australian Sign Language,Auslan,Dictionary,5000+ signs,N/A,CC BY-NC-SA 4.0,https://auslan.org.au/,johnston2022auslan,Multimedia dictionary
+BDSL-IMG-001,BdSL47,Bangla Sign Language,BDSL,Image,47000,10,CC BY 4.0,https://zenodo.org/record/7067906,afzal2022bdsl47,37 Bengali letters + 10 digits
+BDSL-IMG-002,KU-BdSL,Bangla Sign Language,BDSL,Image,4500,8,CC BY 4.0,https://data.mendeley.com/datasets/scpvm2nbkm/1,islam2023kubdsl,3 variants USLD/MSLD/AMSLD
+BDSL-VID-001,Ban-Sign-Sent-9K,Bangla Sign Language,BDSL,Video,9610,12,CC BY-NC 4.0,https://huggingface.co/datasets/banglagov/Ban-Sign-Sent-9K-V1,banglagov2024bansign,Continuous sentence signing
+BDSL-SEN-001,BdSL-Sensor-Glove,Bangla Sign Language,BDSL,Sensor,4824,18,CC BY 4.0,This repository,signtalk2026demo,11 channels 36 gestures
+LIBRAS-VID-001,Libras-UFPR,Brazilian Sign Language,Libras,Video,9600+,6,CC BY 4.0,https://www.inf.ufpr.br/lesoliveira/libras/,oliveira2020libras,Isolated Brazilian signs
+LIBRAS-VID-002,PHOENIX-Libras,Brazilian Sign Language,Libras,Video,Continuous,Research Use,Literature reference,moura2022phoenixlibras,Continuous Libras with glosses
+BSL-VID-001,BOBSL,British Sign Language,BSL,Video,~1400 hours,37,BBC License,https://www.robots.ox.ac.uk/~vgg/data/bobsl/,albanie2021bobsl,BBC broadcast 1940 episodes
+BSL-VID-002,BSL Corpus,British Sign Language,BSL,Video,160 hours,Research Use,https://bslcorpusproject.org/,schembri2011bslcorpus,Conversational BSL
+BSL-DB-001,BSL Signbank,British Sign Language,BSL,Dictionary,Varies,N/A,Custom,https://bslsignbank.ucl.ac.uk/,fenlon2020bslsignbank,Lexical database with video
+CSL-VID-001,DEVISIGN,Chinese Sign Language,CSL,Video,24000,8,Research Use,Literature reference (CASIA),li2015devisign,2000 vocabulary words
+CSL-VID-002,USTC-CSL,Chinese Sign Language,CSL,Video,Research benchmark,Research Use,Literature reference (USTC),huang2018csl,Video-based CSL recognition
+NGT-VID-001,CNGT Corpus,Dutch Sign Language,NGT,Video,Spontaneous conversations,Research Use,https://www.ru.nl/cngt/,crasborn2022cngt,Dutch Sign Language corpus
+LSF-VID-001,Dicta-Sign LSF,French Sign Language,LSF,Video,1000+,Research Use,EU Dicta-Sign Project (archived),mattheyses2012dictasign,EU project recordings
+LSF-DB-001,LSF-Dict,French Sign Language,LSF,Dictionary,5000+ words,N/A,Custom,https://www.lsf-dict.fr/,lsfdict,French SL dictionary
+DGS-VID-001,RWTH-PHOENIX-2014,German Sign Language,DGS,Video,6841,9,Research Use,https://www-i6.informatik.rwth-aachen.de/~koller/RWTH-PHOENIX/,koller2015phoenix,Weather forecasts
+DGS-VID-002,RWTH-PHOENIX-2014T,German Sign Language,DGS,Video+Translation,8257,9,Research Use,https://www-i6.informatik.rwth-aachen.de/~koller/RWTH-PHOENIX-2014-T/,camgoz2018phoenixt,With German translations 39GB
+DGS-VID-003,DGS Corpus,German Sign Language,DGS,Video,Corpus,Research Use,https://www.sign-lang.uni-hamburg.de/dgs-korpus/,konig2015dgs,Large-scale annotated DGS
+GSL-VID-001,GSL-50,Greek Sign Language,GSL,Video,1000+,Research Use,Literature reference (UoA),various,Greek SL vocabulary
+ISL-VID-001,INCLUDE,Indian Sign Language,ISL,Video,38640,15,Research Use,Contact IISc Bangalore,sridhar2020include,263 word classes
+ISL-VID-002,ISL-CSLTR,Indian Sign Language,ISL,Video,Sentence-level,CC BY 4.0,https://data.mendeley.com/datasets/kcmpdxky7p/1,jadhav2021islcsltr,Continuous ISL translation
+ISL-IMG-001,ISL-Alphabet,Indian Sign Language,ISL,Image,12700,1,CC BY 4.0,https://github.com/ayeshatasnim-h/Indian-Sign-Language-dataset,tasnim2021isl,ISL alphabet images
+IRISH-VID-001,ISL Corpus,Irish Sign Language,ISL,Video,Corpus,Research Use,https://www.islc.ie/,lemaster2012islc,Irish SL conversations
+LIS-VID-001,ATIS,Italian Sign Language,LIS,Video,Research,Research Use,Literature reference (UNIBO),cavazza2010atis,Italian SL dataset
+JSL-DB-001,J-ASL,Japanese Sign Language,JSL,Video+Linguistic,Research,Research Use,Literature reference (NICT),various,Japanese SL lexicon
+KSL-VID-001,KETI,Korean Sign Language,KSL,Video,Weather forecast,Research Use,Literature reference (ETRI),various,Korean weather signs
+MSL-IMG-001,MSL Dataset,Malaysian Sign Language,BIM,Image,Sign recognition,CC BY 4.0,https://huggingface.co/datasets/sayedeh/Malaysian-Sign-Language-Dataset,msl2023,Malaysian SL images
+LSM-VID-001,LSM Sign Language,Mexican Sign Language,LSM,Image+Video,Alphabet+words,Research Use,Kaggle / Literature reference,various,Mexican SL signs
+RSL-VID-001,RuSLAN,Russian Sign Language,RSL,Video,Recognition dataset,CC BY 4.0,https://russian-sign-language.github.io/,ruslan2022,Russian SL collection
+RSL-VID-002,RSL-Signs,Russian Sign Language,RSL,Video,Signs,CC BY 4.0,GitHub / Literature reference,various,Russian SL signs
+SSL-VID-001,SSL Corpus,Swedish Sign Language,SSL,Video,Corpus,Research Use,https://www.ling.su.se/ssl/,mesch2012ssl,Swedish SL corpus Stockholm U
+TSL-IMG-001,TSL-51,Thai Sign Language,TSL,Image,Alphabet recognition,CC BY 4.0,https://huggingface.co/datasets/nodtcotai/tsl-51,tsl51,Thai SL alphabet
+MULTI-VID-001,SIGN-Hub,Multilingual,Multiple,Corpus,Multi-language,Research Use,https://www.sign-hub.eu/,hanke2016signhub,ASL BSL DGS LSF GSL ISL Libras
+MULTI-VID-002,Dicta-Sign,Multilingual,Multiple,Video,4000+,Research Use,EU Dicta-Sign Project (archived),mattheyses2012dictasign,BSL DGS GSL LSF
+MULTI-DB-001,SpreadTheSign,Multilingual,30+ languages,Dictionary,500000+ signs,N/A,Personal use,https://www.spreadthesign.com/,eslc2024spreadthesign,Global sign dictionary
+MULTI-DB-002,OpenSLR,Multilingual,Various,Repository,Varies,N/A,Varies,https://www.openslr.org/,openslr,Speech & language resources
+MULTI-DB-003,SLP Toolkit,Multilingual,Multiple,Preprocessed,Varies,N/A,Varies,https://www.sign-language-processing.com/,slp2024,ML-ready SL datasets
+ASL-VID-010,YouTube-ASL,American Sign Language,ASL,Video,11093 videos 984 hours,0,Research Use,https://github.com/google-research/google-research/tree/master/youtube_asl,uthus2023youtubeasl,984 hours of open-domain ASL-English parallel corpus
+ASL-IMG-003,Sign Language 26,American Sign Language,ASL,Image,18200 15 classes,0,Community,https://huggingface.co/datasets/Gsco-HF/sign-language-26,gscohf2024sign26,ASL sign images at 1280x1280
+MULT-3D-001,SignAvatars,Multilingual,Multi,3D Motion,8.34M annotations 70K sequences,0,Research Use,https://github.com/ZhengdiYu/SignAvatars,yu2024signavatars,First large-scale 3D sign language holistic motion dataset
+NSL-VID-001,Nigerian Sign Language Corpus,Nigerian Sign Language,NSL,Video,5250+,0,Research Use,https://huggingface.co/datasets/Lanfrica/sign-to-speech-for-sign-language-understanding-a-case-study-of-nigerian-sign-language,lanfrica2024nsl,Sign-to-speech corpus for Nigerian SL
+PSL-SEN-001,Pakistani Sign Language Gesture Dataset,Pakistani Sign Language,PSL,Sensor,MediaPipe landmarks,0,CC BY 4.0,https://huggingface.co/datasets/Bakhtyar12/Pakistani-Sign-Language,bakhtyar2024psl,MediaPipe-based PSL gesture recognition
+GSL-VID-001,Ghanaian Sign Language Lexicon,Ghanaian Sign Language,GSL,Video,Lexicon,0,Community,https://huggingface.co/datasets/jameszokah/ghanaian-sign-language-lexicon,jameszokah2025ghsl,Ghanaian SL lexicon with landmarks
+MSL-IMG-001,Marathi Sign Language Dataset,Marathi Sign Language,MSL,Image,50100+ 43 classes,0,Community,https://huggingface.co/datasets/VinayHajare/Marathi-Sign-Language,vinayhajare2025msl,Marathi sign alphabet detection at 128x128
+ASL-VID-009,ASL Fingerspelling,American Sign Language,ASL,Video,1500000 frames,22,CC BY 4.0,https://www.kaggle.com/datasets/debashishsau/asl-fingerspelling,kaggle2024aslfingerspelling,Large-scale ASL fingerspelling dataset from Kaggle competition
+BSL-VID-003,Bristol ASL,British Sign Language,BSL,Video,6424,0,Research Use,https://www.bristol.ac.uk/sign-language/research/data/,bristol2024asl,Bristol sign language research data
+CSL-VID-003,CCTV-CSL,Chinese Sign Language,CSL,Video,500 classes 200 signers,Research Use,Literature reference (Chinese Academy of Sciences),cctv2020csl,Chinese sign language video dataset
+DGS-VID-004,Meine DGS,German Sign Language,DGS,Video,Corpus,Research Use,https://www.meine-dgs.de/,meinedgs2020,Crowdsourced DGS corpus
+ISL-VID-003,SignBD,Indian Sign Language,ISL,Image,8000 20 classes,0,CC BY 4.0,https://github.com/AZaslavsky/signbd,azaslavsky2020signbd,Bengali sign language images for detection
+JSL-VID-001,Shinra ASL,Japanese Sign Language,JSL,Video+Linguistic,4039 signs,0,Research Use,https://www.nii.ac.jp/digital-typography/shinra/,shinra2020jsl,Japanese sign language lexicon by NII
+LSA-VID-001,LSA-SAN,Argentine Sign Language,LSA,Image,25600 64 classes,0,CC BY 4.0,https://www.kaggle.com/datasets/kurohana/lsa64,lsa64,64-class LSA alphabet and number signs
+TID-VID-001,BosphorusSign22k,Turkish Sign Language,TID,Video,22526 847 signs,Research Use,https://github.com/turkuth/bosphorussign,bosphorus2022,Multi-view Turkish SL with depth
+VGT-VID-001,VGT Corpus,Flemish Sign Language,VGT,Video,Corpus,Research Use,https://www.uantwerpen.be/en/research-groups/linguistics/vgt-corpus/,vgt2020,Flemish Sign Language corpus UAntwerp

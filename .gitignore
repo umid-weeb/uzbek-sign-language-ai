@@ -3,3 +3,4 @@ __pycache__/
 .DS_Store
 *.mp4
 *.mov
+data/external/sign-language-dataset-hub/.git/

@@ -1,13 +1,15 @@
 import pandas as pd
 import pickle
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 def main():
+    root = Path(__file__).resolve().parents[1]
     print("1. Ma'lumotlar bazasi (Dataset) o'qilmoqda...")
     # CSV faylni pandas orqali ochamiz
-    df = pd.read_csv('data/dataset.csv')
+    df = pd.read_csv(root / "data" / "dataset.csv")
     
     # Harflar (Natijalar) alohida, koordinatalar (X, Y) alohida ajratib olinadi
     X = df.drop('label', axis=1) # Koordinatalar (X)
@@ -30,10 +32,12 @@ def main():
 
     print("5. O'rgatilgan MIYA (Model) kompyuterga saqlanmoqda...")
     # Modelni keyinchalik kamerada ishlatish uchun bitta fayl (pickle) qilib saqlaymiz
-    with open('data/sign_language_model.pkl', 'wb') as f:
+    output_path = root / "archive" / "legacy-models" / "sign_language_model.pkl"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open('wb') as f:
         pickle.dump(model, f)
         
-    print("🎉 Barcha ishlar muvaffaqiyatli yakunlandi! Model 'data/sign_language_model.pkl' nomli faylga saqlandi.")
+    print(f"🎉 Eski baseline model saqlandi: {output_path}")
 
 if __name__ == "__main__":
     main()

@@ -1,15 +1,23 @@
 import cv2
 import csv
 import ssl
+import sys
+from pathlib import Path
 import numpy as np
 from rtmlib import Wholebody
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from features.live_hand_tracking import choose_best_hand, extract_wrist_relative_features
 
 # Mac uchun SSL muammosini chetlab o'tish
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def main():
     video_path = 'full_vidio.mp4'  # Sizning to'liq videongiz nomi
-    csv_file = 'data/dataset.csv'
+    csv_file = ROOT / "data" / "processed" / "legacy_video_capture.csv"
     
     # O'zbek daktil alifbosining ketma-ketligi
     letters = ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z', 'O_star', 'G_star', 'SH', 'CH', 'NG']
@@ -23,7 +31,7 @@ def main():
     for i in range(21):
         header.extend([f'x{i}', f'y{i}'])
         
-    f = open(csv_file, mode='w', newline='')
+    f = csv_file.open(mode='w', newline='', encoding='utf-8')
     writer = csv.writer(f)
     writer.writerow(header)
     
@@ -81,21 +89,14 @@ def main():
                     kpts = keypoints[0]
                     kpts_scores = scores[0]
                     
-                    left_hand_score = np.mean(kpts_scores[91:112])
-                    right_hand_score = np.mean(kpts_scores[112:133])
-
-                    if right_hand_score > left_hand_score and right_hand_score > 0.3:
-                        hand_kpts = kpts[112:133]
-                    elif left_hand_score > right_hand_score and left_hand_score > 0.3:
-                        hand_kpts = kpts[91:112]
-                    else:
+                    hand_kpts, hand_scores, _ = choose_best_hand(kpts, kpts_scores)
+                    if hand_kpts is None or float(np.min(hand_scores)) < 0.10:
                         continue 
                     
                     # Normallashtirish va saqlash
-                    wrist_x, wrist_y = hand_kpts[0]
+                    features = extract_wrist_relative_features(hand_kpts)
                     row = [current_letter]
-                    for (x, y) in hand_kpts:
-                        row.extend([round(float(x - wrist_x), 4), round(float(y - wrist_y), 4)])
+                    row.extend(float(value) for value in features)
                     
                     writer.writerow(row)
                     saved_count += 1

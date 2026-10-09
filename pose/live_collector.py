@@ -1,13 +1,16 @@
 import cv2
 import csv
 import ssl
+from pathlib import Path
 import numpy as np
 from rtmlib import Wholebody, draw_skeleton
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
+ROOT = Path(__file__).resolve().parents[1]
+
 def main():
-    csv_file = 'data/dataset.csv'
+    csv_file = ROOT / "data" / "processed" / "legacy_camera_capture.csv"
     letters = ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z', 'O_star', 'G_star', 'SH', 'CH', 'NG']
     
     print("AI Model yuklanmoqda...")
@@ -17,7 +20,7 @@ def main():
     for i in range(21):
         header.extend([f'x{i}', f'y{i}'])
         
-    f = open(csv_file, mode='w', newline='')
+    f = csv_file.open(mode='w', newline='', encoding='utf-8')
     writer = csv.writer(f)
     writer.writerow(header)
     
@@ -61,8 +64,8 @@ def main():
                 if len(keypoints) > 0:
                     kpts = keypoints[0]
                     kpts_scores = scores[0]
-                    # Faqat o'ng qo'l nuqtalarini olamiz
-                    hand_kpts = kpts[112:133]
+                    # RTMLib mmpose layout: o'ng qo'l 113:134
+                    hand_kpts = kpts[113:134]
                     
                     wrist_x, wrist_y = hand_kpts[0]
                     row = [current_letter]

@@ -1,0 +1,9 @@
+numpy
+pandas
+scikit-learn
+matplotlib
+opencv-python
+onnxruntime
+rtmlib
+torch
+mediapipe>=0.10.35

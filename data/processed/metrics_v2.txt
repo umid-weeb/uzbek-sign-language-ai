@@ -1,0 +1,27 @@
+=== 1) MA'LUMOT ===
+Namunalar: 6547 | Klasslar: 29 | Sessiya ustuni: yoq (blokli split ishlatiladi)
+Y yo'nalishi: kp9 namunalarning 93% ida wristdan YUQORIDA (musbat y). Demak datada y yuqoriga yo'nalgan -> jonli rejimda kamera y'si teskari qilinadi.
+Qo'l o'lchami (wrist->kp9, piksel): klasslar o'rtachasi 15.2..29.3, klass ichidagi og'ish ~2.2
+
+=== 2) HALOLROQ BAHOLASH ===
+Tasodifiy 80/20 split (eski usul, siz ko'rgan turdagi baho): 96.1%
+blokli 5-fold: eski 74.3% | yangi 73.1%
+(Tasodifiy split bilan blokli baho orasidagi farq = oldingi 93% ning qancha qismi 'yodlash' ekanini ko'rsatadi.)
+
+=== 3) JONLI SHAROITNI TAQLID QILISH (test bo'laklari ustida) ===
+Sinov                                        Eski    Yangi
+Oddiy (xuddi shu sessiya sharoiti)          74.3%    73.1%
+Uzoqroq turish (qo'l 0.7x kichik)            9.2%    73.1%
+Yaqinroq turish (qo'l 1.4x katta)           10.5%    73.1%
+Qo'l +15 daraja burilgan                     9.2%    63.6%
+Qo'l -15 daraja burilgan                    11.8%    65.1%
+Ko'zgu (boshqa qo'l yoki flip)              15.2%    74.0%
+Nuqtalarda shovqin (3%)                     42.8%    46.6%
+Eslatma: blokli test hali ham bitta yozuv sessiyasi ichida. Haqiqiy farq masofa/burilish/ko'zgu qatorlarida ko'rinadi; jonli rejim undan ham qiyinroq (yangi kun, yorug'lik, odam).
+
+=== 4) ENG ZAIF HARFLAR (yangi usul) ===
+  Z: 0.39 | SH: 0.44 | Y: 0.49 | X: 0.49 | O_star: 0.53 | G_star: 0.56
+  (bular ko'proq va xilma-xilroq data kerak bo'lgan harflar)
+
+=== 5) YAKUNIY MODEL ===
+Model saqlandi: /Users/isroilovibroximjon/AI-Study-System/uzbek-sign-language-ai/models/gesture_classifier_v2.pkl
